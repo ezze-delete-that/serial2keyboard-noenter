@@ -64,7 +64,7 @@ try:
 		if(s.in_waiting>0):
 			rxLine=s.readline().decode("ascii").strip()
 			keyboard.type(rxLine)
-			keyboard.press(Key.enter)
-			keyboard.release(Key.enter)
+			#keyboard.press(Key.enter)
+			#keyboard.release(Key.enter)
 except:
 	print("Something happened... did you just yank the thing out?")
