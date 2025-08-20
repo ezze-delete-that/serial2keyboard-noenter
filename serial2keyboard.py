@@ -1,70 +1,72 @@
-#pip3 install pynput pyserial
-
+# pip3 install pynput pyserial
 import serial
 from pynput.keyboard import Key, Controller
 import sys
 import glob
 
 def list_ports():
-	""" Finds all serial ports and returns a list containing them
+    """ Lista todos los puertos seriales disponibles """
+    if sys.platform.startswith('win'):
+        ports = ['COM%s' % (i + 1) for i in range(256)]
+    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+        ports = glob.glob('/dev/tty[A-Za-z]*')
+    elif sys.platform.startswith('darwin'):
+        ports = glob.glob('/dev/tty.*')
+    else:
+        raise EnvironmentError('Unsupported platform')
+    result = []
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            result.append(port)
+        except (OSError, Exception):
+            pass
+    return result
 
-		:raises EnvironmentError:
-			On unsupported or unknown platforms
-		:returns:
-			A list of the serial ports available on the system
-	"""
-	if sys.platform.startswith('win'):
-		ports = ['COM%s' % (i + 1) for i in range(256)]
-	elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-		# this excludes your current terminal "/dev/tty"
-		ports = glob.glob('/dev/tty[A-Za-z]*')
-	elif sys.platform.startswith('darwin'):
-		ports = glob.glob('/dev/tty.*')
-	else:
-		raise EnvironmentError('Unsupported platform')
+# Mapeo de códigos ASCII a teclas especiales (pynput.Key)
+SPECIAL_KEYS = {
+    0x5B: Key.cmd,      # Tecla Windows (0x5B)
+    0x1B: Key.esc,      # Escape
+    0x0D: Key.enter,    # Enter
+    # Agrega más códigos aquí según lo necesites
+}
 
-	result = []
-	for port in ports:
-		try:
-			s = serial.Serial(port)	# Try to open a port
-			s.close()				  # Close the port if sucessful
-			result.append(port)		# Add to list of good ports
-		except (OSError, Exception):   # If un sucessful
-			pass
-	return result 
+if len(sys.argv) < 2:
+    print("Uso: python3 serial2keyboard.py [Puerto] [BaudRate opcional]")
+    print("Puertos detectados:", list_ports())
+    sys.exit(1)
 
-
-if(len(sys.argv)<2):
-	print("usage:")
-	print("To run the python script: 'python3 serial2keyboard.py [Port] [Optional: baud rate]', eg: 'python3 serial2keyboard.py /dev/ttyUSB0', or 'python3 serial2keyboard.py /dev/ttyUSB0 9600'")
-	print("To run the native executable made with pyinstaller: './serial2keyboard(probably add .exe on windows) [Port] [optional: baudrate]'")
-	print("Default baud rate if not supplied as second argument: 9600")
-	print("Suspected suitable serial ports are:", list_ports())
-	sys.exit(1)
-
-print("Attempting to open serial port: ", sys.argv[1])
-baudRate=9600
-if(len(sys.argv)==3):
-	baudRate=int(sys.argv[2])
-print("Setting baud rate to",baudRate)
+baudRate = 9600 if len(sys.argv) < 3 else int(sys.argv[2])
+print(f"Abriendo {sys.argv[1]} a {baudRate} bauds")
 
 try:
-	s = serial.Serial(sys.argv[1],baudRate,timeout=1)
-except:
-	print("Failed to open", sys.argv[1], "as a serial port.. are you doing this right?")
-	sys.exit(1)
-
-print("Shit, it worked.. waiting for serial data...")
+    ser = serial.Serial(sys.argv[1], baudRate, timeout=1)
+except Exception as e:
+    print(f"Error al abrir el puerto: {e}")
+    sys.exit(1)
 
 keyboard = Controller()
 
-try:
-	while(s.is_open):
+print("Esperando datos (envía códigos ASCII crudos, ej: 0x5B para Win)...")
 
-		if(s.in_waiting>0):
-			rxLine=s.readline().decode("ascii").strip()
-			keyboard.type(rxLine)
-			#keyboard.press(Key.enter)
-			#keyboard.release(Key.enter)
-except:
-	print("Something happened... did you just yank the thing out?")
+try:
+    while ser.is_open:
+        if ser.in_waiting > 0:
+            data = ser.read(1)  # Lee 1 byte crudo
+            code = ord(data) if data else None
+            
+            if code in SPECIAL_KEYS:
+                keyboard.press(SPECIAL_KEYS[code])
+                keyboard.release(SPECIAL_KEYS[code])
+            else:
+                # Si no es una tecla especial, intenta escribir el carácter
+                try:
+                    keyboard.press(chr(code))
+                    keyboard.release(chr(code))
+                except:
+                    print(f"Código no reconocido: {hex(code)}")
+except KeyboardInterrupt:
+    print("\nCerrando...")
+finally:
+    ser.close()
