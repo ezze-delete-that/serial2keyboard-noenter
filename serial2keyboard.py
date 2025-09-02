@@ -70,8 +70,9 @@ try:
                 try:
                     keyboard.press(chr(code))
                     keyboard.release(chr(code))
-                    keyboard.release(Key.cmd)
-                    superpresionado = False
+                    if superpresionado == True:
+                        keyboard.release(Key.cmd)
+                        superpresionado = False
                 except:
                     print(f"Código no reconocido: {hex(code)}")
 except KeyboardInterrupt:

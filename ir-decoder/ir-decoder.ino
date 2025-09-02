@@ -1,7 +1,8 @@
+#include <string.h>
 //definimo el pin del sensor infrarrojo
 const int irPin = 9;
 //                Power- up - left-right-down- OK - mute-  1  -  2  -  3  -  4  -  5  -  6  -  7  -  8  -  9  -  0  -ch+- ch- - vol+ - vol- // 
-int keymap[21] = {11789,2034,18930,19443,2545,3058,14348,16907,17419,17932,18443,18956,19468,19981,20491,21004,16394,12812,1229,15373,15886}
+int keymap[21] = {11789,2034,18930,19443,2545,3058,14348,16907,17419,17932,18443,18956,19468,19981,20491,21004,16394,12812,1229,15373,15886};
 void setup() 
 {  
   Serial.begin(9600);
@@ -15,10 +16,27 @@ void loop()
   int key = getIrKey();
   //Ninguna señal recibida
   if(key != 0)
+  {
     for(int i=0; i<21 ; i++)
     {
-      if     
+      if(key==keymap[i])
+      {
+        switch(keymap[i])
+        {
+          case 11789:
+            exe("shutdown /s /t 0");
+            break;
+          case 16907:
+            exe("chrome");
+            ful();
+            break;
+
+        }
+      }
     }
+
+
+  }
   
   delay(1000);
 }
@@ -50,19 +68,25 @@ int getIrKey()
   return key;
 }
 
-int sendText(s)
+int sendText(char* tx)
 {
-  Serial.write(s);
+  Serial.write(tx);
   Serial.write("/ENT");
   delay(500);
 
   return 0;
 }
-int exe()
+int exe(char* tx)
 {
   Serial.write("/WIN");
   delay(500);
   Serial.write("r");
+  Serial.write(tx);
+  delay(500);
   Serial.write("/ENT");
+}
+int ful()
+{
+  Serial.write("/FUL");
   delay(500);
 }
