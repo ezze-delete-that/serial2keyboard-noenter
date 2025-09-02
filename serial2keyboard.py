@@ -28,9 +28,10 @@ def list_ports():
 
 # Mapeo de códigos ASCII a teclas especiales (pynput.Key)
 SPECIAL_KEYS = {
-    0x5B: Key.cmd,      # Tecla super (0x5B)
-    0x1B: Key.esc,      # Escape
-    0x0D: Key.enter,    # Enter
+    "/WIN" : Key.cmd,      # Tecla super (0x5B)
+    "/ESC" : Key.esc,      # Escape
+    "/ENT" : Key.enter,    # Enter
+    "/FUL" : Key.f11,      # Fullscreen
     # Agrega más códigos aquí según lo necesites
 }
 
