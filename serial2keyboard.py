@@ -4,6 +4,8 @@ from pynput.keyboard import Key, Controller
 import sys
 import glob
 
+enterpresionado = False
+
 def list_ports():
     """ Lista todos los puertos seriales disponibles """
     if sys.platform.startswith('win'):
@@ -58,12 +60,17 @@ try:
             
             if code in SPECIAL_KEYS:
                 keyboard.press(SPECIAL_KEYS[code])
-                keyboard.release(SPECIAL_KEYS[code])
+                if code == 0x5B:
+                    enterpresionado = True
+                else:
+                    keyboard.release(SPECIAL_KEYS[code])
             else:
                 # Si no es una tecla especial, intenta escribir el carácter
                 try:
                     keyboard.press(chr(code))
                     keyboard.release(chr(code))
+                    keyboard.release(Key.cmd)
+                    enterpresionado = False
                 except:
                     print(f"Código no reconocido: {hex(code)}")
 except KeyboardInterrupt:
