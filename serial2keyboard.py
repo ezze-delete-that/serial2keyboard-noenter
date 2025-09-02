@@ -4,7 +4,7 @@ from pynput.keyboard import Key, Controller
 import sys
 import glob
 
-enterpresionado = False
+superpresionado = False
 
 def list_ports():
     """ Lista todos los puertos seriales disponibles """
@@ -28,7 +28,7 @@ def list_ports():
 
 # Mapeo de códigos ASCII a teclas especiales (pynput.Key)
 SPECIAL_KEYS = {
-    0x5B: Key.cmd,      # Tecla Windows (0x5B)
+    0x5B: Key.cmd,      # Tecla super (0x5B)
     0x1B: Key.esc,      # Escape
     0x0D: Key.enter,    # Enter
     # Agrega más códigos aquí según lo necesites
@@ -70,7 +70,7 @@ try:
                     keyboard.press(chr(code))
                     keyboard.release(chr(code))
                     keyboard.release(Key.cmd)
-                    enterpresionado = False
+                    superpresionado = False
                 except:
                     print(f"Código no reconocido: {hex(code)}")
 except KeyboardInterrupt:
