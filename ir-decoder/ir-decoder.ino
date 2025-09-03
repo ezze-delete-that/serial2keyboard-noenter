@@ -1,4 +1,12 @@
 #include <string.h>
+// 0x00 Super key
+// 0x01 escape
+// 0x02 enter
+// 0x03 fullscreen
+// 0x04 page up
+// 0x05 page down 
+// 0x06 volume+
+// 0x07 volume-
 //definimo el pin del sensor infrarrojo
 const int irPin = 9;
 //                Power- up - left-right-down- OK - mute-  1  -  2  -  3  -  4  -  5  -  6  -  7  -  8  -  9  -  0  -ch+- ch- - vol+ - vol- // 
