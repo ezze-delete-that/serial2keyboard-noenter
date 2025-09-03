@@ -92,6 +92,7 @@ int exe(char* tx)
   Serial.write(tx);
   delay(500);
   Serial.write(0x02);
+  delay(500);
 }
 int ful()
 {
