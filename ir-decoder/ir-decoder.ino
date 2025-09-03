@@ -15,9 +15,9 @@ void loop()
   //guardamos el resultado de la funcion en una variable
   int key = getIrKey();
   //Ninguna señal recibida
-  if(key != 0)
-  {
-    for(int i=0; i<21 ; i++)
+  //if(key != 0)
+  //{/*
+    /*for(int i=0; i<21 ; i++)
     {
       if(key==keymap[i])
       {
@@ -33,10 +33,10 @@ void loop()
 
         }
       }
-    }
+    }*/
+    Serial.println(key);
 
-
-  }
+  //}
   
   delay(1000);
 }
