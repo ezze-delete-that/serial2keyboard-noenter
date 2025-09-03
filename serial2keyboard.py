@@ -5,6 +5,7 @@ import sys
 import glob
 
 superpresionado = False
+mouse = False
 
 def list_ports():
     """ Lista todos los puertos seriales disponibles """
@@ -28,11 +29,14 @@ def list_ports():
 
 # Mapeo de códigos ASCII a teclas especiales (pynput.Key)
 SPECIAL_KEYS = {
-    "/WIN" : Key.cmd,      # Tecla super (0x5B)
-    "/ESC" : Key.esc,      # Escape
-    "/ENT" : Key.enter,    # Enter
-    "/FUL" : Key.f11,      # Fullscreen
-    # Agrega más códigos aquí según lo necesites
+    0x00 : Key.cmd,      # Tecla super (0x5B)
+    0x01 : Key.esc,      # Escape
+    0x02 : Key.enter,    # Enter
+    0x03 : Key.f11,      # Fullscreen
+    0x04 : Key.page_up,  # Page up
+    0x05 : Key.page_down,# Page down
+    0x06 : Key.media_volume_up, # volume +
+    0x07 : Key.media_volume_down, # volume -
 }
 
 if len(sys.argv) < 2:
@@ -51,18 +55,18 @@ except Exception as e:
 
 keyboard = Controller()
 
-print("Esperando datos (envía códigos ASCII crudos, ej: 0x5B para Win)...")
+print("Esperando datos")
 
 try:
     while ser.is_open:
         if ser.in_waiting > 0:
             data = ser.read(1)  # Lee 1 byte crudo
             code = ord(data) if data else None
-            
+            print(code)
             if code in SPECIAL_KEYS:
                 keyboard.press(SPECIAL_KEYS[code])
-                if code == 0x5B:
-                    enterpresionado = True
+                if code == 0x00:
+                    superpresionado = True
                 else:
                     keyboard.release(SPECIAL_KEYS[code])
             else:

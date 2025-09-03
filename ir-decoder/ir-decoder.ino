@@ -5,7 +5,7 @@ const int irPin = 9;
 int keymap[21] = {11789,2034,18930,19443,2545,3058,14348,16907,17419,17932,18443,18956,19468,19981,20491,21004,16394,12812,1229,15373,15886};
 void setup() 
 {  
-  Serial.begin(9600);
+  Serial.begin(115200);
   //Usamos el pin como input para recibir la información
   pinMode(irPin, INPUT);
 }
@@ -15,9 +15,10 @@ void loop()
   //guardamos el resultado de la funcion en una variable
   int key = getIrKey();
   //Ninguna señal recibida
-  //if(key != 0)
-  //{/*
-    /*for(int i=0; i<21 ; i++)
+  if(key != 0)
+  {
+    //Serial.println(key);
+    for(int i=0; i<21 ; i++)
     {
       if(key==keymap[i])
       {
@@ -33,10 +34,8 @@ void loop()
 
         }
       }
-    }*/
-    Serial.println(key);
-
-  //}
+    }
+  }
   
   delay(1000);
 }
@@ -71,22 +70,23 @@ int getIrKey()
 int sendText(char* tx)
 {
   Serial.write(tx);
-  Serial.write("/ENT");
+  Serial.write(0x02);
   delay(500);
 
   return 0;
 }
 int exe(char* tx)
 {
-  Serial.write("/WIN");
+  Serial.write(0x00);
   delay(500);
   Serial.write("r");
+  delay(500);
   Serial.write(tx);
   delay(500);
-  Serial.write("/ENT");
+  Serial.write(0x02);
 }
 int ful()
 {
-  Serial.write("/FUL");
+  Serial.write(0x03);
   delay(500);
 }
