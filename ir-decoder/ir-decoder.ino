@@ -40,8 +40,11 @@ void loop()
             ful();
             break;
           case 15373:
-
-
+            vol('+', 5);
+            break;
+          case 15886:
+            vol('-', 5);
+            break;
         }
       }
     }
