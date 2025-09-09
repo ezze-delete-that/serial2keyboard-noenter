@@ -45,7 +45,9 @@ void loop()
           case 15886:
             vol('-', 5);
             break;
-        }
+          case 18930:
+
+        } 
       }
     }
   }
@@ -79,7 +81,10 @@ int getIrKey()
   delay(250);
   return key;
 }
-
+int move(byte i)
+{
+  //escribir funcion para que envie up,down,left o right sin tocar enter
+}
 int sendText(char* tx)
 {
   Serial.write(tx);
