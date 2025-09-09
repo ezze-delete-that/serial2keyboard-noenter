@@ -39,6 +39,8 @@ void loop()
             exe("chrome");
             ful();
             break;
+          case 15373:
+
 
         }
       }
@@ -98,4 +100,23 @@ int ful()
 {
   Serial.write(0x03);
   delay(500);
+}
+
+int vol(char v, int cant)
+{
+  byte vol;
+  if(v == '+')
+  {
+    vol = 0x06;
+  }
+  else if(v == '-')
+  {
+    vol = 0x07;
+  }
+  for(int i; i <= cant; i++)
+  {
+    Serial.write(vol);
+    delay(300);
+  }
+  
 }
