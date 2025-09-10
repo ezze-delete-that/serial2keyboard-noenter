@@ -39,6 +39,8 @@ void loop()
             exe("chrome");
             ful();
             break;
+          case 17419:
+            
           case 15373:
             vol('+', 5);
             break;
@@ -46,7 +48,17 @@ void loop()
             vol('-', 5);
             break;
           case 18930:
-
+            move(0x10)
+            break;
+          case 19443:
+            move(0x11);
+            break;
+          case 2034:
+            move(0x08);
+            break;
+          case 2545:
+            move(0x09);
+            break;
         } 
       }
     }
@@ -84,6 +96,8 @@ int getIrKey()
 int move(byte i)
 {
   //escribir funcion para que envie up,down,left o right sin tocar enter
+  Serial.write(i);
+  delay(500);
 }
 int sendText(char* tx)
 {

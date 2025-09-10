@@ -42,6 +42,7 @@ SPECIAL_KEYS = {
     0x09 : Key.down,     # down arrow
     0x10 : Key.left,     # left arrow
     0x11 : Key.right,    # right arrow
+    0x12 : 
 }
 
 if len(sys.argv) < 2:
