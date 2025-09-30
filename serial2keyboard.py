@@ -2,11 +2,13 @@
 import serial
 from pynput.keyboard import Key, Controller
 from pynput.mouse import Controller as mController
+from pynput.mouse import Button as mButton
 import sys
 import glob
 
 superpresionado = False #si esta presionado este se suelta al momento de tocar otra tecla de forma que haga combinación
-movermouse = False #cambia(si es verdadero las flechas mueven el mouse) el que se mueve al presionar las flechas(up,down,etc)
+movermouse = True #cambia(si es verdadero las flechas mueven el mouse) el que se mueve al presionar las flechas(up,down,etc)
+tecladoenpantalla = False #this is when keyboard is on screen
 
 def list_ports():
     """ Lista todos los puertos seriales disponibles """
@@ -41,8 +43,8 @@ SPECIAL_KEYS = {
     0x08 : Key.up,       # up arrow
     0x09 : Key.down,     # down arrow
     0x10 : Key.left,     # left arrow
-    0x11 : Key.right,    # right arrow
-    0x12 : 
+    0x11 : Key.right,    # right arrow 
+    0x12 : Key.space,    # space or left click
 }
 
 if len(sys.argv) < 2:
@@ -70,15 +72,17 @@ try:
             code = ord(data) if data else None
             print(code)
             if code in SPECIAL_KEYS:
-                if movermouse == True and code == 0x08 or code == 0x09 or code == 0x10 or code == 0x11:
+                if movermouse == True and code == 0x08 or code == 0x09 or code == 0x10 or code == 0x11 or code == 0x12:
                     if code == 0x08:
                         mouse.move(0,10)
                     elif code == 0x09:
                         mouse.move(0,-10)
                     elif code == 0x10:
                         mouse.move(-10,0)
-                    else:
+                    elif code == 0x11:
                         mouse.move(10,0)
+                    else:
+                        mouse.click(mButton.left, 1)
                 else:
                     keyboard.press(SPECIAL_KEYS[code])
                     if code == 0x00:
