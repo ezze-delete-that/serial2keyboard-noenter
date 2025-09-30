@@ -37,7 +37,7 @@ void loop() {
             exe("osk");
             break;
           case 3058:
-            move(0x12)
+            move(0x12);
             break;
           case 15373:
             vol('+', 5);

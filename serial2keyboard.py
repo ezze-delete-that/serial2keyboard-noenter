@@ -74,15 +74,16 @@ try:
             if code in SPECIAL_KEYS:
                 if movermouse == True and code == 0x08 or code == 0x09 or code == 0x10 or code == 0x11 or code == 0x12:
                     if code == 0x08:
-                        mouse.move(0,10)
+                        mouse.move(0,-50)
                     elif code == 0x09:
-                        mouse.move(0,-10)
+                        mouse.move(0,50)
                     elif code == 0x10:
-                        mouse.move(-10,0)
+                        mouse.move(-30,0)
                     elif code == 0x11:
-                        mouse.move(10,0)
+                        mouse.move(30,0)
                     else:
-                        mouse.click(mButton.left, 1)
+                        mouse.click(mButton.left, 2)
+                        print("click tocado")
                 else:
                     keyboard.press(SPECIAL_KEYS[code])
                     if code == 0x00:
